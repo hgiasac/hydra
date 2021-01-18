@@ -2,6 +2,7 @@ package x
 
 import (
 	"net/url"
+	"regexp"
 
 	"github.com/ory/fosite"
 )
@@ -18,6 +19,8 @@ func IsRedirectURISecure(rc redirectConfiguration) func(redirectURI *url.URL) bo
 
 		for _, allowed := range rc.InsecureRedirects() {
 			if redirectURI.String() == allowed {
+				return true
+			} else if isMatched, err := regexp.MatchString(allowed, redirectURI.String()); err == nil && isMatched {
 				return true
 			}
 		}

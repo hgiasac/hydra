@@ -14,6 +14,7 @@ func (m *mockrc) InsecureRedirects() []string {
 	return []string{
 		"http://foo.com/bar",
 		"http://baz.com/bar",
+		"http://foo.regex/[a-z0-9]+/console",
 	}
 }
 
@@ -29,6 +30,8 @@ func TestIsRedirectURISecure(t *testing.T) {
 		{u: "wta://auth", err: false},
 		{u: "http://foo.com/bar", err: false},
 		{u: "http://baz.com/bar", err: false},
+		{u: "http://foo.regex/v1/console", err: false},
+		{u: "http://foo.regex/v1", err: true},
 	} {
 		uu, err := url.Parse(c.u)
 		require.NoError(t, err)
